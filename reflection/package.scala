@@ -1,9 +1,9 @@
 package scala.reflect
 
-import scala.language.experimental.{macros => prettyPlease}
 import scala.language.implicitConversions
 import org.scalareflect.adt._
 import org.scalareflect.annotations._
+import org.scalareflect.convert._
 import scala.{Seq => _}
 import scala.collection.immutable.Seq
 
@@ -31,7 +31,11 @@ package object core {
     @leaf class File(f: java.io.File) extends Source {
       lazy val content = scala.io.Source.fromFile(f).mkString.toArray
     }
-    object File { def apply(path: Predef.String): Source.File = Source.File(new java.io.File(path)) }
+    object File {
+      def apply(path: Predef.String): Source.File = Source.File(new java.io.File(path))
+    }
+    implicit val stringToSource: Convert[scala.Predef.String, Source] = Convert.apply(Source.String(_))
+    implicit val fileToSource: Convert[java.io.File, Source] = Convert.apply(Source.File(_))
   }
   @root trait Origin { def src: Source }
   object Origin {

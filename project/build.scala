@@ -136,6 +136,7 @@ object build extends Build {
     publishableSettings: _*
   ) settings (
     name := "core",
+    libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-reflect" % _),
     scalaSource in Compile <<= (baseDirectory in Compile)(base => base),
     // scalacOptions ++= Seq("-Xprint:typer"),
     scalacOptions ++= Seq()
